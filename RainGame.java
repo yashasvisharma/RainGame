@@ -1,3 +1,4 @@
+
 /**
  * @author ysharma4, jnieto6
  */
@@ -8,31 +9,36 @@ public class RainGame {
 		// Your netid is the unique part of your @illinois email address
 		// Do not put your name or your UIN. 
 		// REMEMBER TO COMMIT this file...
-	
-		int x=0, y=0, dx=0, dy=0, score = 0, level = 0;
+		int x=320, y=0, dx=0, dy=0, score = 0, level = 0;
 		String text = "";
 		long startTime =System.currentTimeMillis();
 		
 		Zen.setFont("Helvetica-64");
 		while (Zen.isRunning()) {
-			if(Zen.getZenHeight() <= 480){
-			if (text.length() == 0) 
+			if(y <= 520){
+				if (text.length() == 0) 
+				{
+					y = 40;
+					dx += 0;
+					dy += 2;
+					text = "" + (int) (Math.random() * 999);
+					long elapsed = System.currentTimeMillis() - startTime;
+					startTime = System.currentTimeMillis();
+					score += 3000 / elapsed;
+					level += 1;	
+				}
+			}
+			else
 			{
-				x = 0;
-				y = Zen.getZenHeight() / 2;
-				dx += 0;
-				dy += 2;
-				text = "" + (int) (Math.random() * 999);
-				long elapsed = System.currentTimeMillis() - startTime;
-				startTime = System.currentTimeMillis();
-				score += 3000 / elapsed;
-				level += 1;	
+				Zen.drawText("Game Over", 200,50);
+				y=0;
 			}
-			}
-			else{
-				Zen.drawText("Game Over", 200,200);
-			}
-			Zen.setColor(0, 0, 0);
+			if(y<100)
+				Zen.setColor(0,y,255-y);
+			if(y>200)
+				Zen.setColor(255, 400-y, 0);
+			else
+				Zen.setColor(255,y,255-y);
 			Zen.fillRect(0, 0, Zen.getZenWidth(), Zen.getZenHeight());
 
 			Zen.setColor(255, 255, 255);
@@ -43,7 +49,6 @@ public class RainGame {
 			
 			x += dx;
 			y += dy;
-			
 			// Find out what keys the user has been pressing.
 			String user = Zen.getEditText();
 			// Reset the keyboard input to an empty string
@@ -51,13 +56,14 @@ public class RainGame {
 			Zen.setEditText("");
 			Zen.flipBuffer();
 			
-			for(int i=0;i < user.length();i++) {
+			for(int i=0;i < user.length();i++) 
+			{
 				char c = user.charAt(i);
 				if(c == text.charAt(0))
 					text = text.substring(1,text.length()); // all except first character
 			}
 			
-			Zen.sleep(90);// sleep for 90 milliseconds
+			Zen.sleep(60);// sleep for 90 milliseconds
 
 		}
 	}
